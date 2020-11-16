@@ -1,0 +1,334 @@
+---
+title: "Implementation_Exercise_1"
+author: "Andres Martínez"
+date: "14/11/2020"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Identification of Redistributive shocks and Productivity Shocks
+
+Working example: [Redistributive Shocks and Productivity
+Shocks](https://pdf.sciencedirectassets.com/271711/1-s2.0-S0304393210X00083/1-s2.0-S0304393210001273/main.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEIf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQD3QLb9pflwYku1I9JPQV1DaxNH816MLlSCedx%2FcFWbhgIhAJfRb6ezl%2BHifimlpGvSRlnlfmwvCsvlMTKcAt1srC04Kr0DCPD%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQAxoMMDU5MDAzNTQ2ODY1IgxJT%2BoeZQ8%2FK%2BN7He0qkQNyWgWIwrqPKIs2Dy36%2B0skk02AqBmKuE9dQ8ofxEDHUe0VzKICDcxE7Is2VKKgwLB6A6zCnAolrWawbAyvaCODo%2BR675C3kK%2BVu2diT4YpIXqSEjNv0ySxkKktvAxPz9%2FEAI%2Fc7rK3%2BmuJpxUsmTBuz6STWk1CaKUH26%2FvkC8MJ4CTQe3BQtbUJVdoTqdnwrIZ%2B9efCFg7RzZCLCGGIVAWVd%2BxngR0hATn7Vq24HMIvvpzTC8QsVDEAn4Z88ZGDEgaxxDsEPCLc1ygMFo2xqgZPW4ykmydspsGdeHTOg054e1guoiyUS9BHYBcNAMPthG4FGfCDhGlHiOAd5zPFk7qQnw3fVi3JEzWMCI4yKENanPv59GKF517BM7ZKd3Dg%2FJdxWM8qzzmnUpaVsmHjnBtNw0ijI%2FLwrOINhg86uC3a86W5nUpmKOZL5UOTM6iAYoZEErAg2PQpqFj71uxNpPG0j2G0FXOMCYNC8VC%2BGVsRZOGVntPEJOssoEjJ5J4j8bW6%2BwmDodM6w0Q7Et1pcx4ZzCK9sT9BTrqAXKecmaUcopijxja4Wf66iXhdX1Ul7bh9VjTgrYlSrJrrY10oSinkmI60HngmmPnL09tPMAnQmofNXSMGJ29MhtRvdBq95aqWGObghhW1X3h7ZaY%2FEVOL5RYhVImRN6f6Hw7gR6g3cVudf2SG8o7xlPlZxoTyufHyZo58LSZsVfbkBRSwFXVKpw0FVceh6ro4edK5Zn4aamyLuZkBxITyFW4wpMKNWOMx5LR0Hn9Zr6c8sUuYRmXvdaG6OctX1jVuharNqWqmYwzFgTA88sm9GL2ek2qhae2NiXOLclQEra04vu25BvvfdT7jg%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20201115T152832Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTY274UR6MU%2F20201115%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=093645652c14ecec54111b9ff9106715023f14401950abf71a469ff002035244&hash=01438a0a1a3ce0a1df651957a683a1a9279e6963df7261bbfd66cfc9643599bb&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=S0304393210001273&tid=spdf-b778bf2a-6bc4-4c4f-be79-e26a3a448838&sid=3b7d92102aca824f8878809399dbed2582c4gxrqb&type=client)
+by Rios-Rull and Santaeulalia-Llopis (2010). The authors document the
+dynamic effects of productivity shocks on labor share. The so called
+overshooting is the situation when a productivity innovation produces a
+reduction of labor share at impact, making it countercyclical, but it
+also subsequently produces a long-lasting increase in labor share that
+peaks above mean five years later at a level larger in absolute terms
+than the initial drop, after which time it slowly returns to average.
+
+The authors analyze the behavior of a bivariate stochastic process for
+the labor share and a productivity residual (slightly different from the
+Solow residual) that explicitly considers the fact that factor input
+shares change over time
+
+Therefore, we are interested in 2 stationary series linearly detrended
+productivity residual, $z_t^1$ ; and labor share (deviations from mean),
+$z_t^2$
+
+The productivity residual is recovered from data on output, hours,
+capital and labor share. We may be interested not only in the cyclical
+properties of $z_t^1$ and $z_t^2$ but also in the systematic joint
+behavior between $z_t^1$ and $z_t^2$ . To get a better idea of this
+joint dynamics we can use a vector AR system, and compute IRFs and FEVDs
+
+We now pose a statistical model to find an underlying stochastic process
+that generates the joint distribution of $z_t^1$ and $z_t^2$ that is:
+
+$$
+z_t  = \Gamma z_{t-1} + \varepsilon_t, \quad \varepsilon_t  \sim N(0,\Sigma)
+$$
+
+Where, $z_t = (z_t^1, z_t^2)'$ and $\Gamma$ are 2by2 square matrix. The
+innovations $\varepsilon_t = (\varepsilon_t^1, \varepsilon_t^2)'$ are
+serially uncorrelated and follow a bivariate Gaussian distribution with
+unconditional mean zero and a symmetric positive definite
+variance-covariance matrix $\Sigma$
+
+Thus, this specification has seven parameters: the four coefficient
+regressors in $\Gamma$, and the variances and covariance in $\Sigma$
+
+The first step is to load the data, apply the required transformations
+and look at time series plot. We're going to make use of the package
+`vars` as well as other packages as `tidyvers` or `magrittr` If you need
+to download it then go the **Packages** tab and click on **Install**.
+Alternatively, you can type `install.packages(vars)` in the **Console**.
+
+```{r}
+#Load some libraries to use its built in functions
+suppressMessages(library(readxl))
+suppressMessages(library(vars))
+suppressMessages(library(pracma))
+suppressMessages(library(tidyverse))
+suppressMessages(library(magrittr))
+
+data <- read_excel("C:/Users/andre/OneDrive/Documentos/1_Macroeconomics/Problem Set 6/Data_PS2_Macro.xlsx")
+
+names(data) <- c("date", "LS_Total", "LS_Corp", "TFP")
+#Filter to have the same time window as in the  paper
+data  %<>%  filter(date > "1954-03-01" , date <  "2005-03-01")  
+data  %<>%  mutate(TFP_dt =  detrend(TFP, tt = 'linear')) #Linear detrend
+data  %<>%  mutate(LS_Total_dm = mean(LS_Total) - LS_Total) #Deviations from the mean
+
+ggplot(data, aes(date)) +  #Plotting the series
+  geom_line(aes(y = TFP_dt, colour = "TFP_dt")) + 
+  geom_line(aes(y = LS_Total_dm, colour = "LS_Total_dm"))+
+  ggtitle("Linearly detrended TFP & labor share -deviations from mean-") +
+  xlab("") + ylab("")
+
+
+
+```
+
+Looking at the graph we could say that the variables could be considered
+fairly stationary. They seem to have a zero mean and a constant
+variance. Now we estimate the model and interpret the ouptput.
+
+We can make use of information criteria to determine lag length for the
+VAR(p) model.
+
+```{r}
+series <- subset(data, select=c("TFP_dt", "LS_Total_dm"))  
+info.var <- VARselect(series, lag.max = 12, type = "both")
+info.var$selection
+```
+
+Using the HQ/SQ these results suggest that we should make use of a
+VAR(1). We then need to estimate the reduced-form VAR to get an
+appropriate object that is to be manipulated into the structural-form of
+the model.
+
+```{r}
+
+var.1 <- VAR(series, p = 1, type = "none")
+summary(var.1)
+```
+
+The VAR that we have estimated can be expressed compactly as:
+
+$$
+z_t  = \Gamma z_{t-1} + \varepsilon_t, \quad \varepsilon_t  \sim N(0,\Sigma)
+$$
+
+Or explicitly in matrix form as:
+
+$$
+\begin{aligned}
+\begin{bmatrix} z_{1,t}\\z_{2,t}\end{bmatrix} = 
+\begin{bmatrix} \gamma_{1,1} & \gamma_{1,2} \\ \gamma_{2,1} & \gamma_{2,2} \end{bmatrix}
+\begin{bmatrix} z_{1,t-1}\\z_{2,t-1}\end{bmatrix} 
++
+\begin{bmatrix} \varepsilon_{1,t}\\\varepsilon_{2,t}\end{bmatrix}
+\end{aligned}
+$$
+
+As we can see above, the results obtained are:
+
+$$
+\hat{\Gamma} = \begin{bmatrix} 0.999 & 0.034 \\ (2e-16)  &(0.579)\\-0.010 & 0.950 \\(0.047) & (2e-16) \end{bmatrix}
+$$
+
+Nevertheless, the best way to interpret this matrix is to write the VAR
+as a **seemingly unrelated regression equations.**
+
+$$
+z_{1,t}  = \gamma_{1,1} z_{1, t-1} + \gamma_{1,2} z_{2, t-1} + \varepsilon_{1,t} \\
+z_{2,t}  = \gamma_{11} z_{1, t-1} + \gamma_{2,2} z_{2, t-1} + +\varepsilon_{2,t}
+$$
+
+What do the coefficients mean? The first entry (0.999) is the
+coefficient ($\gamma_{1,1}$) of the lag of $z_{1,t}$ on the variable
+$z_{1,t}$. Therefore is the autoregressive coefficient of TFP. The
+second entry (0.034) is the coefficient ($\gamma_{1,2}$) of the lag of
+$z_{2,t}$ on $z_{1,t}$. This is, the autoregressive coefficient
+($\gamma_{2,1}$) of Labor Share on the TFP. The entry on the second row
+and first column (-0.010) is the coefficient of TFP on Labor share, and
+the bottom corner right (0.950) is the autoregressive coefficient
+($\gamma_{2,2}$)of Labor share onto itself.
+
+The fact that $\gamma_{1,2}$ is not significantly different from zero
+implies that current shocks to labor share do not have an impact on
+future productivity
+
+This matrix matrix $\hat{\Gamma}$ can be recovered from the var.1 object
+thorough the coefficients as follows:
+
+```{r}
+est_coefs <- coef(var.1)
+est_coefs <- rbind(est_coefs[[1]][, 1], est_coefs[[2]][, 1]) 
+round(est_coefs, 3)
+```
+
+Once we have recovered the coefficients, we are interested in the
+structure of the innovations . First we will take a look to the
+covariance matrix of residuals, this is $\hat{\Sigma}$. As we can see
+below our innovations are contemporaneously correlated. This is an issue
+because we can not disentangle the effect of one shock in one variable
+and the effect of this shock onto the variable itself and the other
+variable.
+
+```{r}
+summary(var.1)$covres
+```
+
+## From VAR to SVAR
+
+To understand SVAR models, it is important to look more closely at the
+*variance-covariance matrix* . It contains the variances of the
+endogenous variable on its diagonal elements and covariances of the
+errors on the off-diagonal elements. The covariances contain information
+about contemporaneous effects each variable has on the others. The
+covariance matrices of standard VAR models is *symmetric*, i.e. the
+elements to the top-right of the diagonal (the "upper triangular")
+mirror the elements to the bottom-left of the diagonal (the "lower
+triangular"). This reflects the idea that the relations between the
+endogenous variables only reflect correlations and do not allow to make
+statements about causal relationships.
+
+Contemporaneous causality or, more precisely, the structural
+relationships between the variables is analysed in the context of SVAR
+models, which impose special restrictions on the covariance matrix and
+-- depending on the model -- on other coefficient matrices as well. The
+drawback of this approach is that it depends on the more or less
+subjective assumptions made by the researcher. For many researchers this
+is too much subjectiv information, even if sound economic theory is used
+to justify them. However, they can be useful tools and that is why it is
+worth to look into them.
+
+To avoid this issue we have to follow and identification strategy and
+transform our VAR in a SVAR. Exploding the fact that $\gamma_{1,2}$,
+this is, the effect of a lag of Labour Share on TFP is not significantly
+different from zero implies that current shocks to labor share do not
+have an impact on future productivity. Therefore the restriction that we
+are going to use, will make our matrix of VCV to look something like:
+
+$$
+\hat{\Omega} = \begin{bmatrix} \omega_{1,2}& 0 \\ \omega_{2,1} & \omega_{2,2} \\\end{bmatrix}
+$$
+
+To set-up the matrix for the contemporaneous coefficients, we need to
+make use of a matrix that has the appropriate dimensions. This is easily
+achieved with the aid of the `diagnol` matrix. To code this
+appropriately we need to insert zeros for restrictions and `NA` in all
+those places that would not pertain to a restriction.
+
+### The B Model
+
+The B-model describes the structural relationships of the errors
+directly by adding a matrix $B$ to the error term and normalises the
+error variances to unity so that
+
+$$z_t  = \Gamma z_{t-1} + B\varepsilon_t$$
+
+Where
+
+$$u_t = B\varepsilon_t \quad \varepsilon_t \sim(0,I_k) 
+$$ We then need to set-up the matrix for the identification of
+individual shocks. Once again starting with the diagonal matrix, we need
+to insert zeros into the covariance terms, while the variance for each
+of the individual shocks is to be retrieved. Hence
+
+```{r}
+b.mat <- matrix(data=NA,nrow=2,ncol=2)
+b.mat[upper.tri(b.mat)] <- 0
+print(b.mat)
+```
+
+This printout suggest that there will be no covariance terms for the
+residuals. We are finally at a point where we can estimate the SVAR(1)
+model. This is achieved by including the the above two matrices. The
+maximum number of iterations has also been obtained, and we are also
+going to populate values for the Hessian, which is useful when looking
+to trouble shoot.
+
+```{r}
+svar.1 <- SVAR(var.1,  estmethod = "scoring", Amat = NULL, Bmat = b.mat, max.iter = 10000,hessian = TRUE, lrtest = FALSE)
+summary(svar.1)
+```
+
+## IRF
+
+Impulse response functions (IR) answer the question *What is the
+response of current and future values of each of the variables to a
+one-unit increase in the current value of one of the structural errors,
+assuming that this error returns to zero in subsequent periods and that
+all other errors are equal to zero* The implied thought experiment of
+changing one error while holding the others constant makes sense only
+when the errors are uncorrelated across equations. It is slower but more
+clear to keep each impulse reponse function separated to work with it
+latter.
+
+```{r}
+TFP_on_LS <- irf(svar.1, impulse = "TFP_dt",  response = "LS_Total_dm", n.ahead = 40, ortho = F, boot = TRUE)
+
+TFP_on_TFP <- irf(svar.1, impulse = "TFP_dt", response = "TFP_dt",  n.ahead = 40, ortho = F, boot = TRUE)
+LS_on_LS <- irf(svar.1, impulse = "LS_Total_dm", response = "LS_Total_dm", n.ahead = 40, ortho = F, boot = TRUE)
+
+LS_on_TFP <- irf(svar.1, impulse = "LS_Total_dm", response = "TFP_dt",  n.ahead = 40, ortho = F, boot = TRUE)
+
+
+```
+
+Now, we plot the IRF's. With a little help of `ggplot2` it is easier to
+plot nicely both IRF in the same graph. Do we know anything about the
+IRF in advance? Yes, we know.
+
+```{r}
+svar.1$B
+```
+
+```{r}
+a <- as.data.frame(TFP_on_LS$irf) 
+b <- as.data.frame(TFP_on_TFP$irf) %>% mutate(index = 1:n())
+IRF_TFP <-  cbind(a,b)
+ggplot(IRF_TFP, aes(index)) +  #Plotting the series
+  geom_line(aes(y = TFP_dt, colour = "TFP_dt")) + 
+  geom_line(aes(y = LS_Total_dm, colour = "LS_Total_dm"))+
+  geom_hline(yintercept = 0, colour = "#296f96") +
+  ggtitle("Orthogonal Impulse Response to shock in TFP") +
+  xlab("") + ylab("")
+```
+
+```{r}
+a <- as.data.frame(LS_on_TFP$irf) 
+b <- as.data.frame(LS_on_LS$irf) %>% mutate(index = 1:n())
+IRF_LS <-  cbind(a,b)
+ggplot(IRF_LS, aes(index)) +  #Plotting the series
+  geom_line(aes(y = TFP_dt, colour = "TFP_dt")) + 
+  geom_line(aes(y = LS_Total_dm, colour = "LS_Total_dm"))+
+  geom_hline(yintercept = 0, colour = "#296f96") +
+  ggtitle("Orthogonal Impulse Response to shock in LS") +
+  xlab("") + ylab("")
+```
+
+## FEVD
+
+To generate the forecast error variance decompositions we make use of
+the `fevd` command, where we set the number of steps ahead to ten. Note
+that these results suggest that output is largely determined by TFP
+shocks, while Labor share is influenced by both shocks.
+
+```{r}
+var.1.vd <- fevd(var.1, n.ahead = 10)
+plot(var.1.vd)
+
+```
+
+## Forecasting
+
+To forecast forward we can make use of the `predict` command, where in
+this case we are forecasting 8 steps ahead. We are also looking to make
+use of 95% confidence intervals for the forecast.
+
+```{r}
+predictions <- predict(var.1, n.ahead = 8, ci = 0.95)
+plot(predictions, names = "LS_Total_dm")
+
+```

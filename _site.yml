@@ -4,12 +4,19 @@ navbar:
   title: "Nicks Website"
   left:
     - text: "Home"
+      icon: fa-home
       href: index.html
-    - text: "Projects"     ##### the new
-      href: projects.html  ##### stuff
     - text: "About Me"
       href: about.html
+    - text: "Projects"     ##### the new
+      menu:
+        - text: "Time Series"
+        - text: "Notebook on VAR"
+          href: page_a.html
+        - text: "An applied SVAR"
+          href: page_a.html
 output:
   html_document:
     theme: flatly
     css: style.css
+        

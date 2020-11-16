@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Hepta example" />
 
 
-<title>projects</title>
+<title>projects.utf8</title>
 
 <script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -26,6 +25,8 @@
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
 <script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -286,13 +287,30 @@ $(document).ready(function () {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
-</li>
-<li>
-  <a href="projects.html">Projects</a>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
 </li>
 <li>
   <a href="about.html">About Me</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Time Series</li>
+    <li>
+      <a href="page_a.html">Notebook on VAR</a>
+    </li>
+    <li>
+      <a href="page_a.html">An applied SVAR</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -306,13 +324,23 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">projects</h1>
-<h4 class="author">Hepta example</h4>
-<h4 class="date">2/10/2020</h4>
 
 </div>
 
 
+<table style="width:6%;">
+<colgroup>
+<col width="5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>title: “projects” author: “Hepta example” date: “2/10/2020” output:</td>
+</tr>
+<tr class="even">
+<td>html_document: toc: true toc_float: true toc_collapsed: true toc_depth: 3 number_sections: true theme: lumen</td>
+</tr>
+</tbody>
+</table>
 <p>Sometimes I like to do projects and then post them on the internet for the whole world to benefit! here’s some examples.</p>
 <div id="data-visualization-in-r" class="section level2">
 <h2><a href="http://nickstrayer.me/visualization_in_r/">Data Visualization in R</a></h2>
@@ -329,6 +357,17 @@ $(document).ready(function () {
 <li>Interactive plots of things</li>
 <li>I can code!</li>
 </ul>
+</div>
+<div id="quarterly-results" class="section level2 tabset-pills">
+<h2 class="tabset-pills">Quarterly Results</h2>
+<div id="by-product" class="section level3">
+<h3>By Product</h3>
+<p>(tab content)</p>
+</div>
+<div id="by-region" class="section level3">
+<h3>By Region</h3>
+<p>(tab content)</p>
+</div>
 </div>
 
 
