@@ -12,9 +12,9 @@ navbar:
       menu:
         - text: "Time Series"
         - text: "Notebook on VAR"
-          href: page_a.html
+          href: Notebook_VAR.html
         - text: "An applied SVAR"
-          href: page_a.html
+          href: SVAR_Appliation.html
 output:
   html_document:
     theme: flatly
