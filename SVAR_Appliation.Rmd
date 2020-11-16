@@ -2,10 +2,14 @@
 title: "Implementation_Exercise_1"
 author: "Andres Martínez"
 date: "14/11/2020"
-output: html_document
-editor_options: 
-  markdown: 
-    wrap: 72
+output: 
+  html_document:
+  toc: true
+  toc_float: true
+  toc_collapsed: true
+toc_depth: 3
+number_sections: true
+theme: lumen
 ---
 
 ```{r setup, include=FALSE}

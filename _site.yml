@@ -7,16 +7,16 @@ navbar:
       icon: fa-home
       href: index.html
     - text: "About Me"
-      href: about.html
+      href: about.html     ###Try
     - text: "Projects"     ##### the new
       menu:
         - text: "Time Series"
         - text: "Notebook on VAR"
           href: Notebook_VAR.html
         - text: "An applied SVAR"
-          href: SVAR_Appliation.html
+          href: SVAR_Appliation.html ##
 output:
   html_document:
-    theme: flatly
+    theme: lumen
     css: style.css
         
