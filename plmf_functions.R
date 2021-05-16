@@ -131,3 +131,42 @@ plot_fitted_by_hand <- function (dependent, fitted_by_hand ) {
     facet_wrap(~ cntry, scales="free") 
   
 }
+
+fitted_to_df_var <- function (fitted_by_hand){
+
+  df_fitted_by_hand <- as.data.frame(fitted_by_hand) 
+
+
+  df_fitted_by_hand %<>%   rownames_to_column( var = "rowname")   %>%
+  separate(rowname,  c("id", "year"))    %>% 
+  group_by(id, year)
+
+  dta_wide %<>% arrange(id,year)
+  df_fitted_by_hand$PDEB <- dta_wide$PDEB
+
+
+  names(df_fitted_by_hand)  <- c("id", "year" , "fitted_by_hand", "model_PDEB")
+
+
+  df_fitted_by_hand %<>%  transform(id = as.numeric(id)) %>% 
+  transform(year = as.numeric(year)) %>% 
+  transform(fitted_by_hand = as.numeric(fitted_by_hand)) %>% 
+  group_by(id, year) %>% 
+  mutate(dta_wide, cntry = case_when((id == 1) ~ "AUT",
+                                     (id == 2) ~ "BEL",
+                                     (id == 3) ~ "CYP",
+                                     (id == 4) ~ "FIN",
+                                     (id == 5) ~ "FRA",
+                                     (id == 6) ~ "DEU",
+                                     (id == 7) ~ "GRC",
+                                     (id == 8) ~ "IRL",
+                                     (id == 9) ~ "ITA",
+                                     (id == 10) ~ "ESP",
+                                     (id == 11) ~ "NLD",
+                                     (id == 12) ~ "PRT"))
+
+  df_fitted_by_hand_VAR <- merge(df_fitted_by_hand, dta_wide , by=c("id", "year"), all=T)
+
+  return(df_fitted_by_hand_VAR)
+
+}
