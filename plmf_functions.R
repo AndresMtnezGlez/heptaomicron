@@ -84,52 +84,61 @@ plot_pred_plm <- function (dependent, model_object) {
   
 }
 
-plot_fitted_by_hand <- function (dependent, fitted_by_hand ) {
+plot_fitted_by_hand <- function (structuraldebt) {
   
-  df_fitted_by_hand <- as.data.frame(fitted_by_hand) 
-  
-  
-  df_fitted_by_hand %<>%   rownames_to_column( var = "rowname")   %>%
-    separate(rowname,  c("id", "year"))    %>% 
-    group_by(id, year)
-  
-  # PDEB <- as.data.frame(dependent)
-  # names(PDEB) <- "model_PDEB"  
-  # df_fitted_by_hand$PDEB <- PDEB$model_PDEB
-  # 
-  dta_wide %<>% arrange(id,year)
-  df_fitted_by_hand$PDEB <- dta_wide$PDEB
-  
-  
-  names(df_fitted_by_hand)  <- c("id", "year" , "fitted_by_hand", "model_PDEB")
-  
-  
-  df_fitted_by_hand %<>%  transform(id = as.numeric(id)) %>% 
-    transform(year = as.numeric(year)) %>% 
-    transform(fitted_by_hand = as.numeric(fitted_by_hand)) %>% 
-    group_by(id, year) %>% 
-    mutate(dta_wide, cntry = case_when((id == 1) ~ "AUT",
-                                       (id == 2) ~ "BEL",
-                                       (id == 3) ~ "CYP",
-                                       (id == 4) ~ "FIN",
-                                       (id == 5) ~ "FRA",
-                                       (id == 6) ~ "DEU",
-                                       (id == 7) ~ "GRC",
-                                       (id == 8) ~ "IRL",
-                                       (id == 9) ~ "ITA",
-                                       (id == 10) ~ "ESP",
-                                       (id == 11) ~ "NLD",
-                                       (id == 12) ~ "PRT"))
-  
-  ggplot(data = df_fitted_by_hand, aes(year)) +
-    geom_line(aes(y = fitted_by_hand), color = "#cb4154", size = 1) +  
-    geom_line(aes(y = model_PDEB), color="#4199cb", size = 1 ) +
-    geom_hline(yintercept=60, linetype="dashed", color = "red")+
-    labs(title = "Structural debt level (red) and Observed debt level(blue)",
-         subtitle = 'EZ Selected countries',
-         y = "Percentage of GDP", x = "") + 
-    facet_wrap(~ cntry, scales="free") 
-  
+
+df_fitted_by_hand_old <- as.data.frame(structuraldebt) 
+# df_fitted_by_hand_new <- as.data.frame(structuraldebt_new) 
+
+
+df_fitted_by_hand_old["id"] <- dta_wide$id                 # Add new column to data
+df_fitted_by_hand_old["year"] <- dta_wide$year                 # Add new column to data
+
+
+# df_fitted_by_hand_new["id"] <- dta_wide$id                 # Add new column to data
+# df_fitted_by_hand_new["year"] <- dta_wide$year  
+
+# PDEB <- as.data.frame(dependent)
+# names(PDEB) <- "model_PDEB"  
+# df_fitted_by_hand$PDEB <- PDEB$model_PDEB
+# 
+dta_wide %<>% arrange(id,year)
+df_fitted_by_hand_old$PDEB <- dta_wide$PDEB
+# df_fitted_by_hand_new$PDEB <- dta_wide$PDEB
+
+# df_fitted_by_hand_old$structuraldebt_new <- df_fitted_by_hand_new$structuraldebt_new
+
+df_fitted_by_hand <- df_fitted_by_hand_old
+
+names(df_fitted_by_hand)  <- c("structural_old" , "id", "year"  , "model_PDEB")
+
+
+df_fitted_by_hand %<>%  transform(id = as.numeric(id)) %>% 
+  transform(year = as.numeric(year)) %>% 
+  transform(fitted_by_hand = as.numeric(structuraldebt)) %>% 
+  group_by(id, year) %>% 
+  mutate(., cntry = case_when((id == 1) ~ "AUT",
+                                     (id == 2) ~ "BEL",
+                                     (id == 4) ~ "FIN",
+                                     (id == 5) ~ "FRA",
+                                     (id == 6) ~ "DEU",
+                                     (id == 7) ~ "GRC",
+                                     (id == 8) ~ "IRL",
+                                     (id == 9) ~ "ITA",
+                                     (id == 10) ~ "ESP",
+                                     (id == 11) ~ "NLD",
+                                     (id == 12) ~ "PRT"))
+
+ggplot(data = df_fitted_by_hand, aes(year)) +
+  geom_line(aes(y = structural_old), color = "#cb4154", size = 1) +
+  # geom_line(aes(y = structural_new), color = "orange", size = 1) +  
+  geom_line(aes(y = model_PDEB), color="#4199cb", size = 1 ) +
+  geom_hline(yintercept=60, linetype="dashed", color = "red")+
+  labs(title = "Structural debt level oldg (red), new (orange) and Observed debt level(blue)",
+       subtitle = 'EZ Selected countries',
+       y = "Percentage of GDP", x = "") + 
+  facet_wrap(~ cntry, scales="free")
+
 }
 
 fitted_to_df_var <- function (fitted_by_hand){
